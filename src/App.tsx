@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react'
+import { RaceScreen } from './screens/RaceScreen'
 import { RosterScreen } from './screens/RosterScreen'
 import { SpinScreen } from './screens/SpinScreen'
 
-type Tab = 'spin' | 'roster'
+type Tab = 'spin' | 'race' | 'roster'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'spin', label: 'Spin' },
+  { id: 'race', label: 'Race' },
   { id: 'roster', label: 'Roster' },
 ]
 
 function tabFromHash(): Tab {
-  return window.location.hash === '#roster' ? 'roster' : 'spin'
+  const hash = window.location.hash.slice(1)
+  return TABS.some(t => t.id === hash) ? (hash as Tab) : 'spin'
 }
 
 export default function App() {
@@ -40,7 +43,9 @@ export default function App() {
           </nav>
         </div>
       </header>
-      {tab === 'spin' ? <SpinScreen /> : <RosterScreen />}
+      {tab === 'spin' && <SpinScreen />}
+      {tab === 'race' && <RaceScreen />}
+      {tab === 'roster' && <RosterScreen />}
     </div>
   )
 }

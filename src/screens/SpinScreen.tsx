@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import * as sfx from '../audio/sfx'
 import { Badge } from '../components/Badge'
 import { WheelCanvas, type WheelHandle } from '../components/WheelCanvas'
@@ -6,8 +6,8 @@ import { DRIVERS, DRIVER_BY_ID, type Driver } from '../data/drivers'
 import { REGULAR_LOOK, looksFor } from '../data/outfits'
 import { VEHICLES, VEHICLE_BY_ID, type VehicleType } from '../data/vehicles'
 import { mix } from '../lib/color'
-import { loadJSON, saveJSON } from '../lib/local'
-import { DEFAULT_PLAYERS, PLAYERS_KEY, RIDES_KEY, type Player, type Ride } from '../lib/players'
+import type { Player, Ride } from '../lib/players'
+import { getState, patchRide, renamePlayer, setRide, useStore } from '../lib/store'
 import { randomIndex, spreadByGroup } from '../wheel/math'
 import type { Slice } from '../wheel/paint'
 import type { SpinOptions, WheelLook } from '../wheel/WheelView'
@@ -58,8 +58,8 @@ function driverLine(ride: Ride): string {
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 export function SpinScreen() {
-  const [players, setPlayers] = useState<Player[]>(() => loadJSON(PLAYERS_KEY, DEFAULT_PLAYERS))
-  const [rides, setRides] = useState<Record<string, Ride>>(() => loadJSON(RIDES_KEY, {}))
+  const players = useStore(s => s.players)
+  const rides = useStore(s => s.rides)
   const [activeId, setActiveId] = useState(() => players[0]?.id)
   const [busy, setBusy] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -68,9 +68,6 @@ export function SpinScreen() {
   const driverWheel = useRef<WheelHandle>(null)
   const vehicleWheel = useRef<WheelHandle>(null)
 
-  useEffect(() => saveJSON(PLAYERS_KEY, players), [players])
-  useEffect(() => saveJSON(RIDES_KEY, rides), [rides])
-
   const active = players.find(p => p.id === activeId) ?? players[0]
   const ride = rides[active.id] ?? {}
   const driver = ride.driverId ? DRIVER_BY_ID[ride.driverId] : undefined
@@ -78,9 +75,6 @@ export function SpinScreen() {
   const sharedWith = driver
     ? players.filter(p => p.id !== active.id && rides[p.id]?.driverId === driver.id).map(p => p.name)
     : []
-
-  const patchRide = (playerId: string, patch: Ride) =>
-    setRides(all => ({ ...all, [playerId]: { ...all[playerId], ...patch } }))
 
   async function spinDriver(playerId: string): Promise<Driver> {
     const i = randomIndex(DRIVERS.length)
@@ -111,7 +105,7 @@ export function SpinScreen() {
   async function run(part: Part, player: Player): Promise<void> {
     setActiveId(player.id)
     if (part === 'ride') {
-      setRides(all => ({ ...all, [player.id]: {} }))
+      setRide(player.id, {})
       const vehicleDone = spinVehicle(player.id)
       const d = await spinDriver(player.id)
       await spinOutfit(player.id, d)
@@ -122,7 +116,7 @@ export function SpinScreen() {
       const d = await spinDriver(player.id)
       await spinOutfit(player.id, d)
     } else if (part === 'outfit') {
-      const current = rides[player.id]?.driverId
+      const current = getState().rides[player.id]?.driverId
       if (current) await spinOutfit(player.id, DRIVER_BY_ID[current])
     } else {
       patchRide(player.id, { vehicleId: undefined })
@@ -162,7 +156,7 @@ export function SpinScreen() {
   function rename(e: FormEvent<HTMLFormElement> | null, playerId: string, value: string) {
     e?.preventDefault()
     const name = value.trim().slice(0, 16)
-    if (name) setPlayers(ps => ps.map(p => (p.id === playerId ? { ...p, name } : p)))
+    if (name) renamePlayer(playerId, name)
     setEditingId(null)
   }
 

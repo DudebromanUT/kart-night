@@ -20,7 +20,7 @@ Mom, Dad, Kid and Player 4, synced across the family's phones and tablets.
 
 1. **Foundation** (done): project setup, all 50 drivers, their 103 outfits, 40 vehicles, 8 cups and the 24-racer points table, with tests.
 2. **The wheels** (done): a driver wheel (50) and a vehicle wheel (40), drawn in WebGL with motion blur, marquee lights, a flapper that clicks on every peg, sound and a confetti reveal. Drivers with outfits get a second, smaller wheel that pops up over the hub. Every spin uses the browser's crypto random source, so each slice has an equal chance.
-3. **Race night**: pick the cup, enter each player's finishing place (1st to 24th), live standings, cup winner celebration.
+3. **Race night** (done): Grand Prix cups (4 races) and Knockout Tour rallies (all 12). Tap each racer's finishing place, 1st to 24th, and see points as you go. Knockout Tour shows which checkpoint knocked each racer out and scores the final place like a Grand Prix race. Tonight's standings run until 5 a.m., with confetti for every cup and rally winner.
 4. **History and sync**: Supabase database, family sign-in, per-player history (wins, average place, favorite driver, head-to-head).
 5. **Ship it**: deploy so it opens from a bookmark on every device.
 
