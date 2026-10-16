@@ -16,7 +16,7 @@ Mom, Dad, Kid and Player 4, synced across the family's phones and tablets.
 
 ## Plan
 
-1. **Foundation** (done): project setup, all 50 drivers, 40 vehicles, 8 cups and the 24-racer points table, with tests.
+1. **Foundation** (done): project setup, all 50 drivers, their 103 outfits, 40 vehicles, 8 cups and the 24-racer points table, with tests.
 2. **The wheels**: a driver wheel and a vehicle wheel, drawn in WebGL, with real spin physics, a ticking pointer, sound and a reveal. An "unlocked only" filter so the wheels skip what you have not unlocked yet.
 3. **Race night**: pick the cup, enter each player's finishing place (1st to 24th), live standings, cup winner celebration.
 4. **History and sync**: Supabase database, family sign-in, per-player history (wins, average place, favorite driver, head-to-head).

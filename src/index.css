@@ -77,6 +77,7 @@ h3 { font-size: 1.05rem; color: var(--chalk-dim); margin-bottom: 10px; }
 }
 .tile-name { font-weight: 800; }
 .tile-note { font-size: 0.78rem; color: var(--chalk-dim); }
+.tile-note.outfits { color: var(--coin); font-weight: 700; }
 
 .badge {
   width: 40px;

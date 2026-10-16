@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { DRIVERS } from './drivers'
+import { DRIVERS, DRIVER_BY_ID } from './drivers'
+import { OUTFITS, looksFor } from './outfits'
 import { VEHICLES } from './vehicles'
 import { CUPS } from './cups'
 import { FIELD_SIZE, POINTS_BY_PLACE, ordinal, pointsFor } from '../lib/scoring'
@@ -23,6 +24,15 @@ describe('roster', () => {
     expect(new Set(DRIVERS.map(d => d.id)).size).toBe(DRIVERS.length)
     expect(new Set(VEHICLES.map(v => v.id)).size).toBe(VEHICLES.length)
     for (const d of DRIVERS) expect(d.color).toMatch(/^#[0-9A-F]{6}$/i)
+  })
+
+  it('has 103 outfits across 24 drivers, all on the roster', () => {
+    const ids = Object.keys(OUTFITS)
+    expect(ids).toHaveLength(24)
+    expect(Object.values(OUTFITS).flat()).toHaveLength(103)
+    for (const id of ids) expect(DRIVER_BY_ID[id]).toBeDefined()
+    expect(looksFor('mario')).toHaveLength(10)
+    expect(looksFor('goomba')).toEqual(['Regular'])
   })
 
   it('has 8 cups of 4 courses', () => {

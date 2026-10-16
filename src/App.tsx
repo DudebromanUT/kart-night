@@ -1,6 +1,7 @@
 import { DRIVERS, type Driver, type UnlockMethod } from './data/drivers'
 import { VEHICLES, type VehicleType } from './data/vehicles'
 import { CUPS } from './data/cups'
+import { OUTFITS } from './data/outfits'
 import { POINTS_BY_PLACE, ordinal } from './lib/scoring'
 
 // Step 1 screen: shows the full roster so the data can be checked before the wheels go in.
@@ -51,6 +52,11 @@ export default function App() {
                     <Badge driver={d} />
                     <span className="tile-name">{d.name}</span>
                     {d.unlockHint && <span className="tile-note">{d.unlockHint}</span>}
+                    {OUTFITS[d.id] && (
+                      <span className="tile-note outfits">
+                        {OUTFITS[d.id].length} outfit{OUTFITS[d.id].length === 1 ? '' : 's'}
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>
