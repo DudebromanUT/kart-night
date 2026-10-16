@@ -15,7 +15,7 @@ import {
   nextCourse, sharedRanks, standings, tonightsEvents, type EventKind, type RaceEntry, type RaceEvent,
 } from '../lib/racing'
 import { ordinal, pointsFor } from '../lib/scoring'
-import { removeEvent, saveEvent, setActiveEvent, useStore } from '../lib/store'
+import { addRace, removeEvent, setActiveEvent, startEvent, undoLastRace, useStore } from '../lib/store'
 
 const KIND_LABEL: Record<EventKind, string> = { gp: 'Grand Prix', ko: 'Knockout Tour' }
 
@@ -70,9 +70,7 @@ export function RaceScreen() {
   const rows = standings(tonight, players.map(p => p.id))
 
   const start: StartEvent = (kind, trackId, playerIds) => {
-    const e: RaceEvent = { id: newId(), kind, trackId, playerIds, races: [], startedAt: Date.now() }
-    saveEvent(e)
-    setActiveEvent(e.id)
+    startEvent({ id: newId(), kind, trackId, playerIds, races: [], startedAt: Date.now() })
   }
 
   function onSaved(e: RaceEvent) {
@@ -227,14 +225,10 @@ function EventInProgress({ event, players, rides, onSaved }: InProgressProps) {
       rides: Object.fromEntries(event.playerIds.map(id => [id, rides[id] ?? {}])),
       at: Date.now(),
     }
-    const updated = { ...event, races: [...event.races, entry] }
-    saveEvent(updated)
-    onSaved(updated)
+    addRace(event.id, entry)
+    onSaved({ ...event, races: [...event.races, entry] })
   }
 
-  function undoLast() {
-    saveEvent({ ...event, races: event.races.slice(0, -1) })
-  }
 
   return (
     <section className="panel event-panel" style={{ '--accent': accentOf(event) } as CSSProperties} aria-labelledby="event-title">
@@ -290,7 +284,7 @@ function EventInProgress({ event, players, rides, onSaved }: InProgressProps) {
 
       <div className="event-actions">
         {event.races.length > 0 && (
-          <button type="button" className="btn btn-ghost" onClick={undoLast}>Undo race {event.races.length}</button>
+          <button type="button" className="btn btn-ghost" onClick={() => undoLastRace(event.id)}>Undo race {event.races.length}</button>
         )}
         <button type="button" className="btn btn-ghost" onClick={() => setActiveEvent(null)}>Back to race menu</button>
         <ConfirmButton

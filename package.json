@@ -8,9 +8,11 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:db": "./scripts/test-db.sh"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.117.2",
     "pixi.js": "8.21.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"

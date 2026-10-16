@@ -69,6 +69,13 @@ export function SpinScreen() {
   const vehicleWheel = useRef<WheelHandle>(null)
 
   const active = players.find(p => p.id === activeId) ?? players[0]
+  if (!active) {
+    return (
+      <main className="spin-page">
+        <p className="empty-note">No racers yet. Add them when you set up your family.</p>
+      </main>
+    )
+  }
   const ride = rides[active.id] ?? {}
   const driver = ride.driverId ? DRIVER_BY_ID[ride.driverId] : undefined
   const vehicle = ride.vehicleId ? VEHICLE_BY_ID[ride.vehicleId] : undefined
