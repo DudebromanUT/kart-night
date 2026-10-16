@@ -2,7 +2,7 @@
 
 A family scoreboard for Mario Kart World. Two roulette wheels pick each racer's
 driver and vehicle, then the app scores every race and keeps the history for
-Mom, Dad, Kid and Player 4, synced across the family's phones and tablets.
+every racer in the family, synced across the family's phones and tablets.
 
 ![Driver and vehicle wheels after a spin](docs/wheels.jpg)
 
@@ -22,7 +22,7 @@ Mom, Dad, Kid and Player 4, synced across the family's phones and tablets.
 2. **The wheels** (done): a driver wheel (50) and a vehicle wheel (40), drawn in WebGL with motion blur, marquee lights, a flapper that clicks on every peg, sound and a confetti reveal. Drivers with outfits get a second, smaller wheel that pops up over the hub. Every spin uses the browser's crypto random source, so each slice has an equal chance.
 3. **Race night** (done): Grand Prix cups (4 races) and Knockout Tour rallies (all 12). Tap each racer's finishing place, 1st to 24th, and see points as you go. Knockout Tour shows which checkpoint knocked each racer out and scores the final place like a Grand Prix race. Tonight's standings run until 5 a.m., with confetti for every cup and rally winner.
 4. **History and sync** (done): Supabase database with a family sign-in. Racers, rides, cups and rallies sync to every signed-in device, live. A History tab shows all-time standings, a card per racer (cups and rallies won, race wins, podiums, average place, most-raced and best driver, favorite vehicle), head-to-head records and every race night.
-5. **Ship it**: deploy so it opens from a bookmark on every device.
+5. **Ship it** (done): every push to `main` runs the checks and publishes to GitHub Pages at https://dudebromanut.github.io/kart-night/. Add it to the home screen and it opens full-screen with its own icon.
 
 ## Data sources
 
