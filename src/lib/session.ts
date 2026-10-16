@@ -90,10 +90,11 @@ export async function signIn(email: string, password: string): Promise<string | 
   return null
 }
 
+/** Signs out this device only. Other devices on the shared family login stay signed in. */
 export async function signOut(): Promise<void> {
   disconnect()
   setSession({ status: 'signed-out' })
-  await supabase?.auth.signOut()
+  await supabase?.auth.signOut({ scope: 'local' })
 }
 
 /** First sign-in only: names the family and its racers. Returns a message, or null on success. */
